@@ -1,0 +1,39 @@
+@startuml
+
+entity "Копия" as Copy {
+  + ИД_Копии : int <<PK>>
+  Положение_на_полке : string
+  Примерная_дата_возврата : date
+}
+
+entity "Книга" as Book {
+  + ISBN : int <<PK>>
+  Год : int
+  Название : string
+  Автор : string
+  Количество_страниц : int
+}
+
+entity "Издательство" as Publisher {
+  + Название_издательства : string <<PK>>
+  Адрес : string
+}
+
+entity "Категория" as Category {
+  + Название_категории : string <<PK>>
+}
+
+entity "Читатель" as Reader {
+  + ИД_Читателя : int <<PK>>
+  Фамилия : string
+  Имя : string
+  Адрес : string
+  Дата_рождения : date
+}
+
+Copy --|{ Book : Содержит
+Book --|{ Publisher : Издана
+Book --|{ Category : Принадлежит
+Reader--|{ Copy : Заимствована
+
+@enduml
