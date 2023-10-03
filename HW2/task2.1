@@ -1,0 +1,32 @@
+@startuml
+
+entity "Дом" as house {
+  + Адрес
+}
+
+entity "Улица" as street {
+  + Название
+}
+
+entity "Город" as city {
+  + Название
+}
+
+entity "Страна" as country {
+  + Название
+}
+
+entity "Квартира" as flat {
+  + Номер
+  Адрес_дома
+}
+
+
+house --|> street : Расположена на
+street --|> city : Находится в
+city --|> country : Находится в
+flat --|> house : Расположена в
+
+
+
+@enduml
