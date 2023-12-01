@@ -10,9 +10,9 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     volumes:
-      - ./scripts/Seleznev_217_1/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./scripts/library/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - 5433:5432
+      - "5433:5432"
     networks:
       - db-network
 
@@ -24,9 +24,9 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     volumes:
-      - ./scripts/Seleznev_217_2/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./scripts/trains/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - 5434:5432
+      - "5434:5432"
     networks:
       - db-network
 
@@ -38,9 +38,9 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     volumes:
-      - ./scripts/Seleznev_217_3/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./scripts/ambulance/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - 5435:5432
+      - "5435:5432"
     networks:
       - db-network
 
