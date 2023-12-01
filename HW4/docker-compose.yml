@@ -1,1 +1,50 @@
 
+version: '3'
+
+services:
+  db1:
+    image: postgres:14.5
+    container_name: Seleznev_217_1
+    environment:
+      POSTGRES_DB: library
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./scripts/Seleznev_217_1/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - 5433:5432
+    networks:
+      - db-network
+
+  db2:
+    image: postgres:14.5
+    container_name: Seleznev_217_2
+    environment:
+      POSTGRES_DB: trains
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./scripts/Seleznev_217_2/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - 5434:5432
+    networks:
+      - db-network
+
+  db3:
+    image: postgres:14.5
+    container_name: Seleznev_217_3
+    environment:
+      POSTGRES_DB: ambulance
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./scripts/Seleznev_217_3/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - 5435:5432
+    networks:
+      - db-network
+
+networks:
+  db-network:
+    driver: bridge
+
