@@ -1,7 +1,7 @@
 \c library;
 
 CREATE TABLE Reader(
-    ID BIGSERIAL NOT NULL,
+    ID integer NOT NULL,
     LastName varchar NOT NULL,
     FirstName varchar NOT NULL,
     Address varchar NOT NULL,
@@ -11,17 +11,17 @@ CREATE TABLE Reader(
 
 CREATE TABLE Publisher(
     PubName varchar,
-    PubKind INTEGER,
+    PubKind integer,
 
     PRIMARY KEY (PubName)
 );
 
 
 CREATE TABLE Book(
-    ISBN INTEGER,
+    ISBN integer,
     Title varchar,
     Author varchar,
-    PagesNum INTEGER,
+    PagesNum integer,
     PubYear date,
     PubName varchar,
 
@@ -40,19 +40,19 @@ CREATE TABLE Category(
 );
 
 CREATE TABLE Copy(
-    ISBN INTEGER,
-    CopyNumber INTEGER,
-    Shelf INTEGER,
-    Position INTEGER,
+    ISBN integer,
+    CopyNumber integer,
+    Shelf integer,
+    Position integer,
 
     PRIMARY KEY (ISBN, CopyNumber),
     FOREIGN KEY (ISBN) REFERENCES Book (ISBN)
 );
 
 CREATE TABLE Borrowing(
-    ReaderNr INTEGER,
-    ISBN INTEGER,
-    CopyNumber INTEGER,
+    ReaderNr integer,
+    ISBN integer,
+    CopyNumber integer,
     ReturnDate date,
 
     FOREIGN KEY (ReaderNr) REFERENCES Reader (ID),
@@ -60,7 +60,7 @@ CREATE TABLE Borrowing(
 );
 
 CREATE TABLE BookCat(
-    ISBN INTEGER,
+    ISBN integer,
     CategoryName varchar,
 
     FOREIGN KEY (ISBN) REFERENCES Book (ISBN),
