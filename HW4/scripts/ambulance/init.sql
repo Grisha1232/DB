@@ -26,8 +26,11 @@ CREATE TABLE Doctor (
     Rang varchar,
 
     PRIMARY KEY (PersonNr),
-    FOREIGN KEY (PersonNr, Name, StatNr)
-        REFERENCES StationsPersonal (PersonNr, Name, StatNr)
+
+    FOREIGN KEY (PersonNr)
+                    REFERENCES StationsPersonal (PersonNr),
+    FOREIGN KEY (StatNr)
+                    REFERENCES Station (StatNr)
 );
 
 CREATE TABLE Caregivers (
@@ -37,8 +40,10 @@ CREATE TABLE Caregivers (
     Qualification varchar,
 
     PRIMARY KEY (PersonNr),
-    FOREIGN KEY (PersonNr, Name, StatNr)
-                        REFERENCES StationsPersonal (PersonNr, Name, StatNr)
+    FOREIGN KEY (PersonNr)
+                        REFERENCES StationsPersonal (PersonNr),
+    FOREIGN KEY (StatNr)
+                        REFERENCES Station (StatNr)
 );
 
 CREATE TABLE Room(
