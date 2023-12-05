@@ -1,5 +1,5 @@
 ## 1
-Для первого задания запросы лежат [здесь](https://github.com/Grisha1232/DB/blob/main/HW5/sql/library/querys.sql)
+Для первого задания запросы лежат [здесь](https://github.com/Grisha1232/DB/blob/main/HW5/sql/library/querys.sql)  
 Также есть начальные значения для проверки [здесь](https://github.com/Grisha1232/DB/blob/main/HW5/scripts/library/init.sql)
 
 ### Скриншоты 
@@ -26,5 +26,5 @@
 
 
 ## 2
-Для первого задания запросы лежат [здесь](https://github.com/Grisha1232/DB/blob/main/HW5/sql/train/querys.sql)
+Для второго задания запросы лежат [здесь](https://github.com/Grisha1232/DB/blob/main/HW5/sql/train/querys.sql)  
 Также есть начальные значения для проверки [здесь](https://github.com/Grisha1232/DB/blob/main/HW5/scripts/train/init.sql)
