@@ -28,3 +28,12 @@
 ## 2
 Для второго задания запросы лежат [здесь](https://github.com/Grisha1232/DB/blob/main/HW5/sql/train/querys.sql)  
 Также есть начальные значения для проверки [здесь](https://github.com/Grisha1232/DB/blob/main/HW5/scripts/train/init.sql)
+
+
+* a)
+<img width="785" alt="image" src="https://github.com/Grisha1232/DB/assets/58052549/d4ad8b11-91f8-48ff-b8c9-76ffd34c7ec8">  
+<img width="697" alt="image" src="https://github.com/Grisha1232/DB/assets/58052549/5b77b016-e85b-481a-a47b-96588904cb94">  
+
+* б)
+<img width="658" alt="image" src="https://github.com/Grisha1232/DB/assets/58052549/3f390072-ed12-4797-9749-3830aa6f2eb9">  
+<img width="634" alt="ima. e" src="https://github.com/Grisha1232/DB/assets/58052549/d538ab31-4f1e-4b50-9a75-98c5b9e023b0"> 
