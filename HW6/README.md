@@ -1,8 +1,8 @@
 ## 1
-Запросы лежат [здесь]()
+Запросы лежат [здесь](https://github.com/Grisha1232/DB/blob/main/HW6/sql/task1.sql)
 
 ## 2
-Запросы лежат [здесь]()
+Запросы лежат [здесь](https://github.com/Grisha1232/DB/blob/main/HW6/sql/task2.sql)
 
 ## 3
 
