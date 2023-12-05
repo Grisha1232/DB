@@ -23,3 +23,8 @@
 <img width="604" alt="image" src="https://github.com/Grisha1232/DB/assets/58052549/f587a64e-a5b0-4f73-8151-eeb72928b23e">  
 <img width="319" alt="image" src="https://github.com/Grisha1232/DB/assets/58052549/a111d1d9-8e32-4284-8033-f9406d760c79">  
 
+
+
+## 2
+Для первого задания запросы лежат [здесь](https://github.com/Grisha1232/DB/blob/main/HW5/sql/train/querys.sql)
+Также есть начальные значения для проверки [здесь](https://github.com/Grisha1232/DB/blob/main/HW5/scripts/train/init.sql)
