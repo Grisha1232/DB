@@ -8,7 +8,7 @@ CREATE TABLE city (
 
 CREATE TABLE Station (
     Name varchar,
-    TracksNr integer,
+    Tracks integer,
     CityName varchar,
     Region varchar,
 
@@ -38,3 +38,22 @@ CREATE TABLE Connection (
     FOREIGN KEY (FromStation) REFERENCES Station (Name),
     FOREIGN KEY (ToStation) REFERENCES Station (Name)
 );
+
+INSERT INTO city (Name, Region) VALUES
+    ('Москва', 'Центральный'),
+    ('Тверь', 'Центральный'),
+    ('Санкт-Петербург', 'Северо-Западный');
+
+INSERT INTO station (Name, Tracks, CityName, Region) VALUES
+    ('Станция1', 3, 'Москва', 'Центральный'),
+    ('Станция2', 2, 'Тверь', 'Центральный'),
+    ('Станция3', 4, 'Санкт-Петербург', 'Северо-Западный');
+
+INSERT INTO train (TrainNr, Length, StartStationName, EndStationName) VALUES
+    (101, 200, 'Станция1', 'Станция2'),
+    (102, 250, 'Станция2', 'Станция3');
+
+INSERT INTO connection (FromStation, ToStation, TrainNr, Departure, Arrival) VALUES
+    ('Станция1', 'Станция2', 101, '2023-01-01 08:00:00', '2023-01-01 12:00:00'),
+    ('Станция2', 'Станция3', 102, '2023-01-01 14:00:00', '2023-01-01 18:00:00'),
+    ('Станция1', 'Станция3', 101, '2023-01-01 10:00:00', '2023-01-01 16:00:00');
