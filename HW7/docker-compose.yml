@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  db1:
+    image: postgres:14.5
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5433:5432"
+    networks:
+      - db-network
+
+networks:
+  db-network:
+    driver: bridge
