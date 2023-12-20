@@ -1,23 +1,38 @@
 #include <iostream>
 #include <pqxx/pqxx>
 #include <random>
+#include <set>
+#include <map>
 
 class SimpleSeeder {
 public:
-    explicit SimpleSeeder(pqxx::connection &connection, unsigned int seed)
-        : connection(connection), generator(seed) {}
+    explicit SimpleSeeder(pqxx::connection &connection, unsigned int seed,
+                          int countCountry, int countOlympics, int countPlayers, int countEvents, int countResults)
+        : connection(connection), generator(seed) {
+        addCountries(countCountry);
+        addOlympics(countOlympics);
+        addPlayers(countPlayers);
+        addEvents(countEvents);
 
-    void seedPlayers(int count) {
+        seedCountries();
+        seedOlympics();
+        seedPlayers();
+        seedEvents();
+        seedResults(countResults);
+    }
+
+    void seedCountries() {
         pqxx::work transaction(connection);
 
-        for (int i = 0; i < count; ++i) {
-            std::string name = generateRandomName();
-            std::string gender = generateRandomGender();
-            std::string country = generateRandomCountry();
-            std::string birthdate = generateRandomBirthdate();
+        for (const auto &country : countries) {
+            std::string name = country.first;
+            std::string countryId = country.second;
+            int areaSqkm = generateRandomInt(100000, 1000000);
+            int population = generateRandomInt(1000000, 10000000);
 
-            std::string query = "INSERT INTO players (player_name, gender, country, birthdate) "
-                                "VALUES ('" + name + "', '" + gender + "', '" + country + "', '" + birthdate + "');";
+            std::string query = "INSERT INTO Countries (name, country_id, area_sqkm, population) "
+                                "VALUES ('" + name + "', '" + countryId + "', " +
+                                std::to_string(areaSqkm) + ", " + std::to_string(population) + ");";
 
             transaction.exec(query);
         }
@@ -25,35 +40,19 @@ public:
         transaction.commit();
     }
 
-    void seedOlympics(int count) {
+    void seedOlympics() {
         pqxx::work transaction(connection);
 
-        for (int i = 0; i < count; ++i) {
-            int year = generateRandomYear();
-            std::string season = generateRandomSeason();
-            std::string country = generateRandomCountry();
+        for (const auto &olympicId : olympicIds) {
+            std::string countryId = generateRandomCountryId();
             std::string city = generateRandomCity();
+            int year = generateRandomInt(1960, 2023);
+            std::string startDate = generateRandomDate();
+            std::string endDate = generateRandomDate();
 
-            std::string query = "INSERT INTO olympics (year, season, country, city) "
-                                "VALUES (" + std::to_string(year) + ", '" + season + "', '" + country + "', '" + city + "');";
-
-            transaction.exec(query);
-        }
-
-        transaction.commit();
-    }
-
-    void seedEvents(int count) {
-        pqxx::work transaction(connection);
-
-        for (int i = 0; i < count; ++i) {
-            std::string sport = generateRandomSport();
-            std::string eventName = generateRandomEventName();
-            std::string location = generateRandomCity();
-            std::string scheduledTime = generateRandomScheduledTime();
-
-            std::string query = "INSERT INTO events (sport, event_name, location, scheduled_time) "
-                                "VALUES ('" + sport + "', '" + eventName + "', '" + location + "', '" + scheduledTime + "');";
+            std::string query = "INSERT INTO Olympics (olympic_id, country_id, city, year, startdate, enddate) "
+                                "VALUES ('" + olympicId + "', '" + countryId + "', '" + city + "', " +
+                                std::to_string(year) + ", '" + startDate + "', '" + endDate + "');";
 
             transaction.exec(query);
         }
@@ -61,18 +60,57 @@ public:
         transaction.commit();
     }
 
-    void seedMedals(int count) {
+    void seedPlayers() {
+        pqxx::work transaction(connection);
+
+        for (const auto &playerId : playerIds) {
+            std::string name = "Player" + playerId;
+            std::string countryId = generateRandomCountryId();
+            std::string birthdate = generateRandomDate();
+
+            std::string query = "INSERT INTO Players (name, player_id, country_id, birthdate) "
+                                "VALUES ('" + name + "', '" + playerId + "', '" + countryId + "', '" + birthdate + "');";
+
+            transaction.exec(query);
+        }
+
+        transaction.commit();
+    }
+
+    void seedEvents() {
+        pqxx::work transaction(connection);
+
+        for (const auto &eventId : eventIds) {
+            std::string name = "Event" + eventId;
+            std::string eventType = generateRandomEventType();
+            std::string olympicId = generateRandomOlympicId();
+            int isTeamEvent = generateRandomInt(0, 1);
+            int numPlayersInTeam = generateRandomInt(1, 10);
+            std::string resultNotedIn = generateRandomResultNotedIn();
+
+            std::string query = "INSERT INTO Events (event_id, name, eventtype, olympic_id, is_team_event, "
+                                "num_players_in_team, result_noted_in) VALUES ('" + eventId + "', '" + name + "', '" +
+                                eventType + "', '" + olympicId + "', " + std::to_string(isTeamEvent) + ", " +
+                                std::to_string(numPlayersInTeam) + ", '" + resultNotedIn + "');";
+
+            transaction.exec(query);
+        }
+
+        transaction.commit();
+    }
+
+    void seedResults(int count) {
         pqxx::work transaction(connection);
 
         for (int i = 0; i < count; ++i) {
-            int playerId = generateRandomInt(1, 100);  // Assuming you have 100 players
-            int eventId = generateRandomInt(1, 50);    // Assuming you have 50 events
-            std::string medalType = generateRandomMedalType();
-            bool tie = generateRandomBool();
+            std::string eventId = generateRandomEventId();
+            std::string playerId = generateRandomPlayerId();
+            std::string medal = generateRandomMedal();
+            float result = generateRandomFloat(0.0, 10.0);
 
-            std::string query = "INSERT INTO medals (player_id, event_id, medal_type, tie) "
-                                "VALUES (" + std::to_string(playerId) + ", " + std::to_string(eventId) + ", '"
-                                + medalType + "', " + (tie ? "TRUE" : "FALSE") + ");";
+            std::string query = "INSERT INTO Results (event_id, player_id, medal, result) "
+                                "VALUES ('" + eventId + "', '" + playerId + "', '" + medal + "', " +
+                                std::to_string(result) + ");";
 
             transaction.exec(query);
         }
@@ -84,90 +122,95 @@ private:
     pqxx::connection &connection;
     std::default_random_engine generator;
 
-    // Вспомогательные функции для генерации случайных данных
-    std::string generateRandomName() {
-        // Реализация может быть заменена на свою
-        return "Player" + std::to_string(generateRandomInt(1, 1000));
+    std::map<std::string, std::string> countries;
+    std::set<std::string> olympicIds;
+    std::set<std::string> playerIds;
+    std::set<std::string> eventIds;
+
+    void addCountries(int count) {
+        for (int i = 0; i < count; ++i) {
+            std::string name = "Country" + std::to_string(i);
+            std::string countryId = std::to_string(i);
+            countries[name] = countryId;
+        }
     }
 
-    std::string generateRandomGender() {
-        return generateRandomBool() ? "Male" : "Female";
+    void addOlympics(int count) {
+        for (int i = 0; i < count; i++) {
+            olympicIds.insert(std::to_string(i));
+        }
     }
 
-    std::string generateRandomCountry() {
-        // Реализация может быть заменена на свою
-        return "Country" + std::to_string(generateRandomInt(1, 50));
+    void addPlayers(int count) {
+        for (int i = 0; i < count; ++i) {
+            playerIds.insert(std::to_string(i));
+        }
     }
 
-    std::string generateRandomBirthdate() {
-        // Реализация может быть заменена на свою
-        return "2000-01-01";
+    void addEvents(int count) {
+        for (int i = 0; i < count; ++i) {
+            eventIds.insert(std::to_string(i));
+        }
     }
 
-    int generateRandomYear() {
-        return generateRandomInt(1960, 2022);
+    std::string generateRandomCountryId() {
+        int count = static_cast<int>(countries.size());
+        auto it = std::next(countries.begin(), generateRandomInt(0, count - 1));
+        return it->second;
     }
 
-    std::string generateRandomSeason() {
-        return generateRandomBool() ? "Summer" : "Winter";
+    std::string generateRandomDate() {
+        int year = generateRandomInt(1960, 2023);
+        int month = generateRandomInt(1, 12);
+        int day = generateRandomInt(1, 28); // Примечание: здесь можно уточнить максимальное количество дней в месяце
+
+        return std::to_string(year) + "-" + (month < 10 ? "0" : "") + std::to_string(month) + "-" + (day < 10 ? "0" : "") + std::to_string(day);
     }
+
 
     std::string generateRandomCity() {
-        // Реализация может быть заменена на свою
-        return "City" + std::to_string(generateRandomInt(1, 20));
+        return "City" + std::to_string(generateRandomInt(1, 100));
     }
 
-    std::string generateRandomSport() {
-        // Реализация может быть заменена на свою
-        return "Sport" + std::to_string(generateRandomInt(1, 10));
+    std::string generateRandomEventType() {
+        return "EventType" + std::to_string(generateRandomInt(1, 100));
     }
 
-    std::string generateRandomEventName() {
-        // Реализация может быть заменена на свою
-        return "Event" + std::to_string(generateRandomInt(1, 100));
+    std::string generateRandomResultNotedIn() {
+        return "ResultNotedIn" + std::to_string(generateRandomInt(1, 100));
     }
 
-    std::string generateRandomScheduledTime() {
-        // Реализация может быть заменена на свою
-        return "2023-01-01T12:00:00";
-    }
-
-    std::string generateRandomMedalType() {
-        return generateRandomBool() ? "GOLD" : (generateRandomBool() ? "SILVER" : "BRONZE");
-    }
-
-    bool generateRandomBool() {
-        std::bernoulli_distribution distribution(0.5);
-        return distribution(generator);
+    std::string generateRandomMedal() {
+        std::vector<std::string> medals = {"GOLD", "SILVER", "BRONZE"};
+        std::uniform_int_distribution<int> distribution(0, medals.size() - 1);
+        return medals[distribution(generator)];
     }
 
     int generateRandomInt(int min, int max) {
         std::uniform_int_distribution<int> distribution(min, max);
         return distribution(generator);
     }
-};
 
-int main() {
-    try {
-        pqxx::connection connection("dbname=mydb user=postgres password=postgres hostaddr=127.0.0.1 port=5433");
-        if (!connection.is_open()) {
-            std::cout << "Can't open database" << std::endl;
-            return 1;
-        }
-
-        unsigned int seed = 123;  // Замените этот seed на тот, который вам нужен
-        SimpleSeeder seeder(connection, seed);
-
-        // Генерация фейковых данных
-        seeder.seedPlayers(100);
-        seeder.seedOlympics(10);
-        seeder.seedEvents(50);
-        seeder.seedMedals(200);
-
-    } catch (const std::exception &e) {
-        std::cerr << e.what() << std::endl;
-        return 1;
+    float generateRandomFloat(float min, float max) {
+        std::uniform_real_distribution<float> distribution(min, max);
+        return distribution(generator);
     }
 
-    return 0;
-}
+    std::string generateRandomOlympicId() {
+        int count = static_cast<int>(olympicIds.size());
+        auto it = std::next(olympicIds.begin(), generateRandomInt(0, count - 1));
+        return *it;
+    }
+
+    std::string generateRandomPlayerId() {
+        int count = static_cast<int>(playerIds.size());
+        auto it = std::next(playerIds.begin(), generateRandomInt(0, count - 1));
+        return *it;
+    }
+
+    std::string generateRandomEventId() {
+        int count = static_cast<int>(eventIds.size());
+        auto it = std::next(eventIds.begin(), generateRandomInt(0, count - 1));
+        return *it;
+    }
+};

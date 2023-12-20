@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMALE_CXX_STANDARD_REQUIERED ON)
 
 
-add_executable(dbtest main.cpp)
+add_executable(dbtest main.cpp seeder.cpp)
 
 
 set_target_properties(dbtest PROPERTIES
